@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valo D - Login</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      padding: 20px 40px;
+      text-align: left;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .left-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .slogan {
+      text-align: left;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      margin-left: 40px;
+    }
+
+    .slogan span {
+      font-weight: bold;
+      font-size: 2.5rem;
+    }
+
+    .login-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0px 0px 20px rgba(255,255,255,0.1);
+    }
+
+    .login-box h2 {
+      margin: 0 0 15px;
+      text-align: center;
+    }
+
+    .login-box p {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .login-box p a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+    }
+
+    /* Make button look styled */
+    .login-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 12px;
+      background: #007bff;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background: #0056b3;
+    }
+
+
+    .right-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .right-section img {
+      max-width: 500px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-header">
+    <div class="title">Valo D</div>
+  </div>
+
+  <div class="main-content">
+    <div class="left-section">
+      <div class="slogan">
+        <em>WHERE EVERY STEPS</em> <br>
+        <span>FEEL LIKE YOU</span>
+      </div>
+
+    <div class="login-box">
+      <h2>Welcome Back</h2>
+      <p>Don't have an account yet? <a href="signup.html">Sign up</a></p>
+      <input type="email" id="userEmail" placeholder="Email address" required>
+      <input type="password" id="userPassword" placeholder="Password" required>
+      
+      <!-- Login button -->
+      <button onclick="handleLogin()" class="login-btn">Login</button>
+    </div>
+  </div>
+
+    <div class="right-section">
+      <img src="../../assets/images/pic.png" alt="Dancer">
+    </div>
+  </div>
+
+  <script>
+    // Email validation function
+    function isValidEmail(email) {
+      // Regular expression for email validation
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(email);
+    }
+    
+    // Password validation function
+    function isValidPassword(password) {
+      // Password must meet these requirements:
+      // - At least 8 characters long
+      // - At least one uppercase letter
+      // - At least one lowercase letter
+      // - At least one number
+      // - At least one special character
+      
+      if (password.length < 8) {
+        return { valid: false, message: "Password must be at least 8 characters long!" };
+      }
+      
+      if (!/[A-Z]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one uppercase letter!" };
+      }
+      
+      if (!/[a-z]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one lowercase letter!" };
+      }
+      
+      if (!/[0-9]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one number!" };
+      }
+      
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one special character (!@#$%^&*(),.?\":{}|<>)!" };
+      }
+      
+      return { valid: true, message: "" };
+    }
+    
+    async function handleLogin() {
+      const userEmail = document.getElementById('userEmail').value;
+      const userPassword = document.getElementById('userPassword').value;
+      const loginButton = document.querySelector('.login-btn');
+      
+      // Show loading state
+      const originalText = loginButton.textContent;
+      loginButton.textContent = 'Logging in...';
+      loginButton.disabled = true;
+
+      try {
+        // Basic validation
+        if (!userEmail || !userPassword) {
+          showMessage('Please fill in all required fields!', 'error');
+          return;
+        }
+        
+        // Email validation
+        if (!isValidEmail(userEmail)) {
+          showMessage('Please enter a valid email address!', 'error');
+          return;
+        }
+
+        // Try Supabase authentication first
+        if (window.authUtils && window.supabaseConfig.isConfigured()) {
+          const result = await window.authUtils.signInWithSupabase(userEmail, userPassword);
+          
+          if (result.success) {
+            // Store user data locally for immediate access
+            const userData = result.data.user;
+            const currentUserData = {
+              id: userData.id,
+              email: userData.email,
+              name: userData.user_metadata?.name || userData.email,
+              photo: userData.user_metadata?.photo || '../../assets/images/pic.png'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+            
+            // Get return URL or default to homepage
+            const urlParams = new URLSearchParams(window.location.search);
+            const returnUrl = urlParams.get('return') || '/homepage.html';
+            
+            window.location.href = returnUrl;
+            return;
+          } else {
+            showMessage('Login failed: ' + result.error, 'error');
+            return;
+          }
+        } else {
+          // Fallback to localStorage for development
+          console.log('Using localStorage fallback for authentication');
+          
+          const storedUserData = localStorage.getItem('userData_' + userEmail);
+          
+          if (storedUserData) {
+            const userData = JSON.parse(storedUserData);
+            
+            if (userData.password === userPassword) {
+              // Store current user data
+              const currentUserData = {
+                name: userData.name,
+                email: userEmail,
+                photo: userData.photo || '../../assets/images/pic.png'
+              };
+              localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+              
+              // Get return URL or default to homepage
+              const urlParams = new URLSearchParams(window.location.search);
+              const returnUrl = urlParams.get('return') || '/homepage.html';
+              
+              window.location.href = returnUrl;
+            } else {
+              showMessage('Incorrect password!', 'error');
+            }
+          } else {
+            showMessage('No account found with this email. Please sign up first!', 'error');
+          }
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showMessage('An error occurred during login. Please try again.', 'error');
+      } finally {
+        // Reset button state
+        loginButton.textContent = originalText;
+        loginButton.disabled = false;
+      }
+    }
+
+    // Show in-page message instead of popup
+    function showMessage(message, type = 'info') {
+      // Remove existing message if any
+      const existingMessage = document.querySelector('.message-toast');
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+
+      // Create message element
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message-toast ${type}`;
+      messageDiv.textContent = message;
+      
+      // Style the message
+      messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        z-index: 10000;
+        max-width: 350px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        background: ${type === 'error' ? '#ff4757' : type === 'success' ? '#2ed573' : '#007bff'};
+      `;
+      
+      // Add to document
+      document.body.appendChild(messageDiv);
+      
+      // Animate in
+      setTimeout(() => {
+        messageDiv.style.transform = 'translateX(0)';
+      }, 100);
+      
+      // Remove after 4 seconds
+      setTimeout(() => {
+        messageDiv.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (messageDiv.parentNode) {
+            messageDiv.parentNode.removeChild(messageDiv);
+          }
+        }, 300);
+      }, 4000);
+    }
+  </script>
+
+</body>
+</html>

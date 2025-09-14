@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valo D - Dance Studio</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/auth.js"></script>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h1>Valo D</h1>
+    </div>
+    <div class="nav-links">
+      <a href="pages/auth/login.html">Login</a>
+      <a href="pages/auth/signup.html">Sign Up</a>
+      <a href="about.html">About</a>
+      <a href="contactus.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to Valo D</h1>
+      <p class="hero-subtitle">WHERE EVERY STEP FEELS LIKE YOU</p>
+      <p class="hero-description">Master the art of dance with our comprehensive tutorial platform. From beginner to advanced levels across multiple dance styles.</p>
+      <div class="hero-buttons">
+        <a href="pages/auth/signup.html" class="btn btn-primary">Get Started</a>
+        <button onclick="showAuthRequired()" class="btn btn-secondary">Browse Styles</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/pic.png" alt="Dance Studio">
+    </div>
+  </section>
+
+  <!-- Dance Styles Preview -->
+  <section class="styles-preview">
+    <h2>Dance Styles</h2>
+    <div class="styles-grid">
+      <div class="style-card" onclick="showAuthRequired()">
+        <img src="assets/images/break dance.jpg" alt="Breakdance">
+        <h3>Breakdance</h3>
+        <p>Dance Hard, Break Harder</p>
+        <div class="auth-overlay">🔒 Login Required</div>
+      </div>
+      <div class="style-card" onclick="showAuthRequired()">
+        <img src="assets/images/hiphop.jpg" alt="Hip Hop">
+        <h3>Hip Hop</h3>
+        <p>Move with the Beat, Live the Street</p>
+        <div class="auth-overlay">🔒 Login Required</div>
+      </div>
+      <div class="style-card" onclick="showAuthRequired()">
+        <img src="assets/images/poledance.jpg" alt="Pole Dance">
+        <h3>Pole Dance</h3>
+        <p>Defying Gravity, One Spin at a Time</p>
+        <div class="auth-overlay">🔒 Login Required</div>
+      </div>
+      <div class="style-card" onclick="showAuthRequired()">
+        <img src="assets/images/bhartanatyam.jpg" alt="Bharatanatyam">
+        <h3>Bharatanatyam</h3>
+        <p>Grace in Motion, Culture in Dance</p>
+        <div class="auth-overlay">🔒 Login Required</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2>Why Choose Valo D?</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <h3>Expert Instructors</h3>
+        <p>Learn from industry professionals and renowned choreographers</p>
+      </div>
+      <div class="feature">
+        <h3>Progressive Learning</h3>
+        <p>Structured curriculum from beginner to advanced levels</p>
+      </div>
+      <div class="feature">
+        <h3>Multiple Styles</h3>
+        <p>Explore diverse dance forms and find your passion</p>
+      </div>
+      <div class="feature">
+        <h3>Video Tutorials</h3>
+        <p>High-quality video content you can access anytime</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Valo D</h3>
+        <p>Where every step feels like you</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <a href="about.html">About Us</a>
+        <a href="contactus.html">Contact</a>
+        <a href="styles.html">Dance Styles</a>
+      </div>
+      <div class="footer-section">
+        <h4>Dance Styles</h4>
+        <a href="pages/dance/breakdance/breakdance.html">Breakdance</a>
+        <a href="pages/dance/hiphop/hiphop.html">Hip Hop</a>
+        <a href="pages/dance/poledance/poledance.html">Pole Dance</a>
+        <a href="pages/dance/bharatanatyam/bhartanatyam.html">Bharatanatyam</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Valo D Dance Studio. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  
+  <script>
+    // Check if user is already logged in and redirect to homepage
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const isLoggedIn = await window.authUtils.isAuthenticated();
+        if (isLoggedIn) {
+          window.location.href = '/homepage.html';
+          return;
+        }
+      } catch (error) {
+        console.log('Auth check failed, showing landing page');
+      }
+    });
+
+    // Show authentication required message
+    function showAuthRequired() {
+      // Directly redirect to signup page instead of showing popup
+      window.location.href = '/pages/auth/signup.html';
+    }
+  </script>
+</body>
+</html>

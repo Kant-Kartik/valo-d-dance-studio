@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valo D - Sign Up</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      padding: 20px 40px;
+      text-align: left;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .left-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .slogan {
+      text-align: left;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      margin-left: 40px;
+    }
+
+    .slogan span {
+      font-weight: bold;
+      font-size: 2.5rem;
+    }
+
+    .signup-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0px 0px 20px rgba(255,255,255,0.1);
+    }
+
+    .signup-box h2 {
+      margin: 0 0 15px;
+      text-align: center;
+    }
+
+    .signup-box p {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .signup-box p a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .signup-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      box-sizing: border-box;
+    }
+
+    .signup-box input::placeholder {
+      color: #aaa;
+    }
+
+    /* Make button look styled */
+    .signup-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 12px;
+      background: #28a745;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 15px;
+      border: none;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    .signup-btn:hover {
+      background: #218838;
+    }
+
+    .right-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .right-section img {
+      max-width: 500px;
+      height: auto;
+    }
+
+    .success-message {
+      background: #28a745;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-header">
+    <div class="title">Valo D</div>
+  </div>
+
+  <div class="main-content">
+    <div class="left-section">
+      <div class="slogan">
+        <em>WHERE EVERY STEPS</em> <br>
+        <span>FEEL LIKE YOU</span>
+      </div>
+
+    <div class="signup-box">
+      <h2>Create Account</h2>
+      <p>Already have an account? <a href="login.html">Sign in</a></p>
+      
+      <input type="text" id="firstName" placeholder="First Name" required>
+      <input type="text" id="lastName" placeholder="Last Name" required>
+      <input type="email" id="userEmail" placeholder="Email address" required>
+      <input type="password" id="userPassword" placeholder="Password (8+ chars, A-z, 0-9, special)" required>
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      
+      <!-- Photo upload section -->
+      <div style="margin: 15px 0;">
+        <label for="userPhoto" style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Profile Photo (optional):</label>
+        <input type="file" id="userPhoto" accept="image/*" style="width: 100%; padding: 8px; background: #222; border: none; border-radius: 8px; color: white; box-sizing: border-box;">
+      </div>
+      
+      <button onclick="handleSignup()" class="signup-btn">Create Account</button>
+      
+      <div id="successMessage" class="success-message">
+        🎉 Account has been created successfully! Welcome to Valo D!
+      </div>
+    </div>
+  </div>
+
+    <div class="right-section">
+      <img src="../../assets/images/pic.png" alt="Dancer">
+    </div>
+  </div>
+
+  <script>
+    // Email validation function
+    function isValidEmail(email) {
+      // Regular expression for email validation
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(email);
+    }
+    
+    // Password validation function
+    function isValidPassword(password) {
+      // Password must meet these requirements:
+      // - At least 8 characters long
+      // - At least one uppercase letter
+      // - At least one lowercase letter
+      // - At least one number
+      // - At least one special character
+      
+      if (password.length < 8) {
+        return { valid: false, message: "Password must be at least 8 characters long!" };
+      }
+      
+      if (!/[A-Z]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one uppercase letter!" };
+      }
+      
+      if (!/[a-z]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one lowercase letter!" };
+      }
+      
+      if (!/[0-9]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one number!" };
+      }
+      
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        return { valid: false, message: "Password must contain at least one special character (!@#$%^&*(),.?\":{}|<>)!" };
+      }
+      
+      return { valid: true, message: "" };
+    }
+    
+    async function handleSignup() {
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const userEmail = document.getElementById('userEmail').value;
+      const userPassword = document.getElementById('userPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const userPhotoInput = document.getElementById('userPhoto');
+      const signupButton = document.querySelector('.signup-btn');
+      
+      // Show loading state
+      const originalText = signupButton.textContent;
+      signupButton.textContent = 'Creating Account...';
+      signupButton.disabled = true;
+
+      try {
+        // Basic validation
+        if (!firstName || !lastName || !userEmail || !userPassword || !confirmPassword) {
+          showMessage('Please fill in all required fields!', 'error');
+          return;
+        }
+        
+        // Email validation
+        if (!isValidEmail(userEmail)) {
+          showMessage('Please enter a valid email address!', 'error');
+          return;
+        }
+        
+        // Password validation
+        const passwordValidation = isValidPassword(userPassword);
+        if (!passwordValidation.valid) {
+          showMessage(passwordValidation.message, 'error');
+          return;
+        }
+        
+        // Password confirmation check
+        if (userPassword !== confirmPassword) {
+          showMessage('Passwords do not match!', 'error');
+          return;
+        }
+        
+        const fullName = firstName + ' ' + lastName;
+      
+        // Try Supabase authentication first
+        if (window.authUtils && window.supabaseConfig.isConfigured()) {
+          // Handle photo upload for Supabase
+          let photoData = null;
+          if (userPhotoInput.files && userPhotoInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+              photoData = e.target.result;
+              await attemptSupabaseSignup();
+            };
+            reader.readAsDataURL(userPhotoInput.files[0]);
+          } else {
+            await attemptSupabaseSignup();
+          }
+          
+          async function attemptSupabaseSignup() {
+            const userData = {
+              name: fullName,
+              photo: photoData
+            };
+            
+            const result = await window.authUtils.signUpWithSupabase(userEmail, userPassword, userData);
+            
+            if (result.success) {
+              // Store user data locally for immediate access
+              const currentUserData = {
+                id: result.user.id,
+                email: result.user.email,
+                name: fullName,
+                photo: photoData || '../../assets/images/pic.png'
+              };
+              localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+              
+              // Immediately redirect to homepage - no email verification needed
+              window.location.href = '../../homepage.html';
+            } else {
+              showMessage('Signup failed: ' + result.error, 'error');
+            }
+          }
+        } else {
+          // Fallback to localStorage for development
+          console.log('Using localStorage fallback for signup');
+          
+          // Handle photo upload
+          if (userPhotoInput.files && userPhotoInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const userData = {
+                name: fullName,
+                email: userEmail,
+                password: userPassword, // Store for localStorage auth
+                photo: e.target.result,
+                signupDate: new Date().toISOString()
+              };
+              
+              // Store for localStorage authentication
+              localStorage.setItem('userData_' + userEmail, JSON.stringify(userData));
+              localStorage.setItem('currentUser', JSON.stringify({
+                name: fullName,
+                email: userEmail,
+                photo: e.target.result
+              }));
+              
+              // Immediately redirect to homepage
+              window.location.href = '../../homepage.html';
+            };
+            reader.readAsDataURL(userPhotoInput.files[0]);
+          } else {
+            const userData = {
+              name: fullName,
+              email: userEmail,
+              password: userPassword,
+              photo: '../../assets/images/pic.png',
+              signupDate: new Date().toISOString()
+            };
+            
+            localStorage.setItem('userData_' + userEmail, JSON.stringify(userData));
+            localStorage.setItem('currentUser', JSON.stringify({
+              name: fullName,
+              email: userEmail,
+              photo: '../../assets/images/pic.png'
+            }));
+            
+            // Immediately redirect to homepage
+            window.location.href = '../../homepage.html';
+          }
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showMessage('An error occurred during signup. Please try again.', 'error');
+      } finally {
+        // Reset button state
+        signupButton.textContent = originalText;
+        signupButton.disabled = false;
+      }
+    }
+    
+    function showSuccessMessage() {
+      // Show success message
+      const successMessage = document.getElementById('successMessage');
+      successMessage.style.display = 'block';
+      
+      // Clear all form fields
+      document.getElementById('firstName').value = '';
+      document.getElementById('lastName').value = '';
+      document.getElementById('userEmail').value = '';
+      document.getElementById('userPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      document.getElementById('userPhoto').value = '';
+      
+      // Hide success message after 3 seconds
+      setTimeout(function() {
+        successMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    // Show in-page message instead of popup
+    function showMessage(message, type = 'info') {
+      // Remove existing message if any
+      const existingMessage = document.querySelector('.message-toast');
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+
+      // Create message element
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message-toast ${type}`;
+      messageDiv.textContent = message;
+      
+      // Style the message
+      messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        z-index: 10000;
+        max-width: 350px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        background: ${type === 'error' ? '#ff4757' : type === 'success' ? '#2ed573' : '#007bff'};
+      `;
+      
+      // Add to document
+      document.body.appendChild(messageDiv);
+      
+      // Animate in
+      setTimeout(() => {
+        messageDiv.style.transform = 'translateX(0)';
+      }, 100);
+      
+      // Remove after 4 seconds
+      setTimeout(() => {
+        messageDiv.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (messageDiv.parentNode) {
+            messageDiv.parentNode.removeChild(messageDiv);
+          }
+        }, 300);
+      }, 4000);
+    }
+  </script>
+
+</body>
+</html>
