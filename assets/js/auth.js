@@ -226,8 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Check if current page is protected
     const isProtectedPage = protectedPages.some(page => 
-        currentPage.includes(page) || 
-        (currentPage === '/' && !currentPage.includes('index.html'))
+        currentPage.includes(page)
     );
     
     // If it's a protected page, require authentication
