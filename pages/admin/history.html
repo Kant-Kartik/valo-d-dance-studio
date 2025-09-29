@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin History - Valo D</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/video-manager.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: white;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: #111;
+      padding: 20px;
+      border-bottom: 2px solid #007bff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      color: #007bff;
+    }
+
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #5a6268;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: #222;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #444;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 5px;
+    }
+
+    .history-table {
+      background: #111;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+
+    .table-header {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+      display: grid;
+      grid-template-columns: 120px 80px 200px 150px 150px 1fr;
+      gap: 15px;
+    }
+
+    .table-row {
+      padding: 15px;
+      border-bottom: 1px solid #333;
+      display: grid;
+      grid-template-columns: 120px 80px 200px 150px 150px 1fr;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .table-row:hover {
+      background: #222;
+    }
+
+    .action-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .action-add {
+      background: #28a745;
+      color: white;
+    }
+
+    .action-remove {
+      background: #dc3545;
+      color: white;
+    }
+
+    .dance-type {
+      text-transform: capitalize;
+      color: #007bff;
+    }
+
+    .level {
+      text-transform: capitalize;
+      background: #444;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+    }
+
+    .timestamp {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .admin-user {
+      font-weight: bold;
+      color: #ffc107;
+    }
+
+    .no-history {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-style: italic;
+    }
+
+    .filters {
+      background: #222;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .filter-group label {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .filter-group select {
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+      background: #333;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .table-header,
+      .table-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .table-header > *,
+      .table-row > * {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🛡️ Admin History Dashboard</h1>
+    <a href="../../homepage.html" class="back-btn">← Back to Homepage</a>
+  </div>
+
+  <div class="container">
+    <!-- Stats Section -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="totalActions">0</div>
+        <div class="stat-label">Total Actions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="videosAdded">0</div>
+        <div class="stat-label">Videos Added</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="videosRemoved">0</div>
+        <div class="stat-label">Videos Removed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalVideos">0</div>
+        <div class="stat-label">Total Videos</div>
+      </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters">
+      <div class="filter-group">
+        <label>Action Type:</label>
+        <select id="actionFilter">
+          <option value="">All Actions</option>
+          <option value="ADD">Add Video</option>
+          <option value="REMOVE">Remove Video</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Dance Type:</label>
+        <select id="danceTypeFilter">
+          <option value="">All Dances</option>
+          <option value="bharatanatyam">Bharatanatyam</option>
+          <option value="hiphop">Hip Hop</option>
+          <option value="breakdance">Breakdance</option>
+          <option value="poledance">Pole Dance</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Level:</label>
+        <select id="levelFilter">
+          <option value="">All Levels</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="intense">Intense</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="history-table">
+      <div class="table-header">
+        <div>Timestamp</div>
+        <div>Action</div>
+        <div>Video Title</div>
+        <div>Dance Type</div>
+        <div>Level</div>
+        <div>Admin User</div>
+      </div>
+      <div id="historyContent">
+        <!-- History entries will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allHistory = [];
+    let currentUser = null;
+
+    // Initialize the page
+    async function initializePage() {
+      try {
+        // Check authentication
+        const isAuth = await window.authUtils.isAuthenticated();
+        if (!isAuth) {
+          alert('Please log in to access this page');
+          window.location.href = '../auth/login.html';
+          return;
+        }
+
+        // Check admin privileges
+        const isAdminUser = await window.authUtils.isAdmin();
+        if (!isAdminUser) {
+          alert('Access denied. Admin privileges required.');
+          window.location.href = '../../homepage.html';
+          return;
+        }
+
+        currentUser = await window.authUtils.getCurrentUser();
+        
+        // Load and display history
+        await loadHistory();
+        updateStats();
+        
+        // Set up filter event listeners
+        document.getElementById('actionFilter').addEventListener('change', filterHistory);
+        document.getElementById('danceTypeFilter').addEventListener('change', filterHistory);
+        document.getElementById('levelFilter').addEventListener('change', filterHistory);
+        
+      } catch (error) {
+        console.error('Error initializing page:', error);
+        alert('Error loading admin dashboard');
+      }
+    }
+
+    // Load admin history
+    async function loadHistory() {
+      try {
+        allHistory = await window.videoManager.getAdminHistory();
+        displayHistory(allHistory);
+      } catch (error) {
+        console.error('Error loading history:', error);
+        document.getElementById('historyContent').innerHTML = `
+          <div class="no-history">Error loading history: ${error.message}</div>
+        `;
+      }
+    }
+
+    // Display history in table
+    function displayHistory(history) {
+      const content = document.getElementById('historyContent');
+      
+      if (!history || history.length === 0) {
+        content.innerHTML = '<div class="no-history">No admin actions recorded yet</div>';
+        return;
+      }
+
+      content.innerHTML = history.map(entry => {
+        const timestamp = new Date(entry.timestamp);
+        const actionClass = entry.action === 'ADD' ? 'action-add' : 'action-remove';
+        
+        return `
+          <div class="table-row">
+            <div class="timestamp">${timestamp.toLocaleDateString()} ${timestamp.toLocaleTimeString()}</div>
+            <div><span class="action-badge ${actionClass}">${entry.action}</span></div>
+            <div>${entry.details.title}</div>
+            <div class="dance-type">${entry.details.danceType}</div>
+            <div><span class="level">${entry.details.level}</span></div>
+            <div class="admin-user">${entry.details.adminUser}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Filter history based on selected criteria
+    function filterHistory() {
+      const actionFilter = document.getElementById('actionFilter').value;
+      const danceTypeFilter = document.getElementById('danceTypeFilter').value;
+      const levelFilter = document.getElementById('levelFilter').value;
+
+      let filteredHistory = allHistory;
+
+      if (actionFilter) {
+        filteredHistory = filteredHistory.filter(entry => entry.action === actionFilter);
+      }
+
+      if (danceTypeFilter) {
+        filteredHistory = filteredHistory.filter(entry => entry.details.danceType === danceTypeFilter);
+      }
+
+      if (levelFilter) {
+        filteredHistory = filteredHistory.filter(entry => entry.details.level === levelFilter);
+      }
+
+      displayHistory(filteredHistory);
+    }
+
+    // Update statistics
+    function updateStats() {
+      const totalActions = allHistory.length;
+      const videosAdded = allHistory.filter(entry => entry.action === 'ADD').length;
+      const videosRemoved = allHistory.filter(entry => entry.action === 'REMOVE').length;
+      
+      // Calculate total videos across all categories
+      const videos = JSON.parse(localStorage.getItem('valo_d_videos')) || {};
+      let totalVideos = 0;
+      Object.values(videos).forEach(danceType => {
+        Object.values(danceType).forEach(level => {
+          totalVideos += level.length;
+        });
+      });
+
+      document.getElementById('totalActions').textContent = totalActions;
+      document.getElementById('videosAdded').textContent = videosAdded;
+      document.getElementById('videosRemoved').textContent = videosRemoved;
+      document.getElementById('totalVideos').textContent = totalVideos;
+    }
+
+    // Initialize page when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initializePage);
+  </script>
+
+</body>
+</html>

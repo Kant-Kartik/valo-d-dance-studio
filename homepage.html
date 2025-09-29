@@ -257,6 +257,31 @@
       background: #ff3838;
     }
 
+    .admin-btn {
+      background: #6f42c1;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .admin-btn:hover {
+      background: #5a359c;
+    }
+
+    .admin-indicator {
+      background: #ffc107;
+      color: black;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
     /* Images Section */
     .images {
       display: flex;
@@ -288,6 +313,8 @@
     <div class="profile">
       <img id="profileImage" src="assets/images/pic.png" alt="Profile">
       <span id="profileName">User name</span>
+      <span id="adminIndicator" class="admin-indicator" style="display: none;">ADMIN</span>
+      <button id="adminHistoryBtn" class="admin-btn" onclick="window.location.href='pages/admin/history.html'" style="display: none;">Admin History</button>
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 
@@ -338,7 +365,7 @@
 
   <script>
     // Load user data when page loads
-    window.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('DOMContentLoaded', async function() {
       const userData = localStorage.getItem('currentUser');
       
       if (userData) {
@@ -355,6 +382,15 @@
         if (profileImage && user.photo) {
           profileImage.src = user.photo;
           profileImage.alt = user.name + "'s Profile";
+        }
+        
+        // Show admin controls if user is admin
+        if (user.isAdmin) {
+          const adminIndicator = document.getElementById('adminIndicator');
+          const adminHistoryBtn = document.getElementById('adminHistoryBtn');
+          
+          if (adminIndicator) adminIndicator.style.display = 'inline';
+          if (adminHistoryBtn) adminHistoryBtn.style.display = 'inline';
         }
       }
     });

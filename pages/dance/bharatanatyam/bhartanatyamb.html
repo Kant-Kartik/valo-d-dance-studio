@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valo D - Videos</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../../../assets/js/config.js"></script>
+  <script src="../../../assets/js/auth.js"></script>
+  <script src="../../../assets/js/video-manager.js"></script>
   <style>
     body {
       margin: 0;
@@ -44,32 +48,57 @@
       height: 100%;
       border: none;
     }
+
+    .video-info {
+      margin-top: 10px;
+      padding: 10px;
+      background: #222;
+      border-radius: 4px;
+    }
+
+    .video-info h4 {
+      margin: 0 0 5px 0;
+      color: #007bff;
+    }
+
+    .video-info p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .admin-panel {
+      background: #333;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      border: 2px solid #007bff;
+    }
   </style>
 </head>
 <body>
 
   <h1>Beginner tutorial videos</h1>
 
-  <div class="video-section">
-    <!-- Video 1 -->
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/vmwZ9R03bXs"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-    </div>
-    <!-- Video 2 -->
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/MzDZYVhfgNw"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-    </div>
-    <!-- Video 3 -->
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/OIKOHzePJCA"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-    </div>
+  <div class="video-section" id="videoContainer">
+    <!-- Videos will be loaded dynamically -->
   </div>
+
+  <script>
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        // Load and render videos
+        window.videoManager.renderVideos('bharatanatyam', 'beginner', 'videoContainer');
+        
+        // Add admin controls if user is admin
+        await window.videoManager.addAdminControls('bharatanatyam', 'beginner', 'videoContainer');
+        
+      } catch (error) {
+        console.error('Error initializing video page:', error);
+      }
+    });
+  </script>
 
 </body>
 </html>

@@ -164,6 +164,12 @@
       <input type="password" id="userPassword" placeholder="Password (8+ chars, A-z, 0-9, special)" required>
       <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
       
+      <!-- Admin passcode section -->
+      <div style="margin: 15px 0;">
+        <label for="adminPasscode" style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Admin Passcode (optional):</label>
+        <input type="password" id="adminPasscode" placeholder="Enter admin passcode to create admin account" style="width: 100%; padding: 10px; background: #222; border: none; border-radius: 8px; color: white; box-sizing: border-box;">
+      </div>
+      
       <!-- Photo upload section -->
       <div style="margin: 15px 0;">
         <label for="userPhoto" style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Profile Photo (optional):</label>
@@ -229,6 +235,7 @@
       const userEmail = document.getElementById('userEmail').value;
       const userPassword = document.getElementById('userPassword').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
+      const adminPasscode = document.getElementById('adminPasscode').value;
       const userPhotoInput = document.getElementById('userPhoto');
       const signupButton = document.querySelector('.signup-btn');
       
@@ -264,6 +271,9 @@
         }
         
         const fullName = firstName + ' ' + lastName;
+        
+        // Check admin passcode
+        const isAdmin = adminPasscode === '1234';
       
         // Try Supabase authentication first
         if (window.authUtils && window.supabaseConfig.isConfigured()) {
@@ -283,7 +293,8 @@
           async function attemptSupabaseSignup() {
             const userData = {
               name: fullName,
-              photo: photoData
+              photo: photoData,
+              isAdmin: isAdmin
             };
             
             const result = await window.authUtils.signUpWithSupabase(userEmail, userPassword, userData);
@@ -294,7 +305,8 @@
                 id: result.user.id,
                 email: result.user.email,
                 name: fullName,
-                photo: photoData || '../../assets/images/pic.png'
+                photo: photoData || '../../assets/images/pic.png',
+                isAdmin: isAdmin
               };
               localStorage.setItem('currentUser', JSON.stringify(currentUserData));
               
@@ -317,7 +329,8 @@
                 email: userEmail,
                 password: userPassword, // Store for localStorage auth
                 photo: e.target.result,
-                signupDate: new Date().toISOString()
+                signupDate: new Date().toISOString(),
+                isAdmin: isAdmin
               };
               
               // Store for localStorage authentication
@@ -325,7 +338,8 @@
               localStorage.setItem('currentUser', JSON.stringify({
                 name: fullName,
                 email: userEmail,
-                photo: e.target.result
+                photo: e.target.result,
+                isAdmin: isAdmin
               }));
               
               // Immediately redirect to homepage
@@ -338,14 +352,16 @@
               email: userEmail,
               password: userPassword,
               photo: '../../assets/images/pic.png',
-              signupDate: new Date().toISOString()
+              signupDate: new Date().toISOString(),
+              isAdmin: isAdmin
             };
             
             localStorage.setItem('userData_' + userEmail, JSON.stringify(userData));
             localStorage.setItem('currentUser', JSON.stringify({
               name: fullName,
               email: userEmail,
-              photo: '../../assets/images/pic.png'
+              photo: '../../assets/images/pic.png',
+              isAdmin: isAdmin
             }));
             
             // Immediately redirect to homepage

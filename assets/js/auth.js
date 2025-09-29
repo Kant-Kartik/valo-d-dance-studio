@@ -121,7 +121,8 @@ async function signUpWithSupabase(email, password, userData) {
                 emailRedirectTo: undefined, // Disable email confirmation
                 data: {
                     name: userData.name,
-                    photo: userData.photo || null
+                    photo: userData.photo || null,
+                    isAdmin: userData.isAdmin || false
                 }
             }
         });
@@ -198,7 +199,8 @@ function setupAuthListener() {
                     id: session.user.id,
                     email: session.user.email,
                     name: session.user.user_metadata.name || session.user.email,
-                    photo: session.user.user_metadata.photo || null
+                    photo: session.user.user_metadata.photo || null,
+                    isAdmin: session.user.user_metadata.isAdmin || false
                 };
                 localStorage.setItem('currentUser', JSON.stringify(userData));
             } else if (event === 'SIGNED_OUT') {
@@ -235,6 +237,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Check if current user is admin
+async function isAdmin() {
+    try {
+        const user = await getCurrentUser();
+        return user && user.isAdmin === true;
+    } catch (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+    }
+}
+
+// Require admin privileges
+async function requireAdmin() {
+    const adminStatus = await isAdmin();
+    
+    if (!adminStatus) {
+        alert('Access denied. Admin privileges required.');
+        return false;
+    }
+    
+    return true;
+}
+
 // Export functions for use in other scripts
 window.authUtils = {
     isAuthenticated,
@@ -244,5 +269,7 @@ window.authUtils = {
     signUpWithSupabase,
     signInWithSupabase,
     signOutWithSupabase,
-    initializeSupabase
+    initializeSupabase,
+    isAdmin,
+    requireAdmin
 };
