@@ -202,7 +202,18 @@ function logAdminAction(action, details) {
 // Get admin history (admin only)
 async function getAdminHistory() {
     try {
-        if (!await window.authUtils.isAdmin()) {
+        // Check admin status with fallback to localStorage
+        const isAdminUser = await window.authUtils.isAdmin();
+        const userDataFromStorage = localStorage.getItem('currentUser');
+        let hasAdminAccess = isAdminUser;
+        
+        // Fallback check if auth utils fails
+        if (!hasAdminAccess && userDataFromStorage) {
+            const userData = JSON.parse(userDataFromStorage);
+            hasAdminAccess = userData.isAdmin === true;
+        }
+        
+        if (!hasAdminAccess) {
             throw new Error('Admin privileges required');
         }
         

@@ -290,15 +290,34 @@
           return;
         }
 
-        // Check admin privileges
+        // Get current user first
+        currentUser = await window.authUtils.getCurrentUser();
+        console.log('Current user:', currentUser); // Debug log
+        
+        // Check admin privileges with more detailed debugging
         const isAdminUser = await window.authUtils.isAdmin();
-        if (!isAdminUser) {
+        console.log('Is admin user:', isAdminUser); // Debug log
+        
+        // Also check localStorage directly as fallback
+        const userDataFromStorage = localStorage.getItem('currentUser');
+        if (userDataFromStorage) {
+          const userData = JSON.parse(userDataFromStorage);
+          console.log('User data from localStorage:', userData); // Debug log
+          
+          // If auth utils fails but localStorage shows admin, use that
+          if (!isAdminUser && userData.isAdmin === true) {
+            console.log('Using localStorage admin status as fallback');
+            // Continue with admin access
+          } else if (!isAdminUser && !userData.isAdmin) {
+            alert('Access denied. Admin privileges required.');
+            window.location.href = '../../homepage.html';
+            return;
+          }
+        } else if (!isAdminUser) {
           alert('Access denied. Admin privileges required.');
           window.location.href = '../../homepage.html';
           return;
         }
-
-        currentUser = await window.authUtils.getCurrentUser();
         
         // Load and display history
         await loadHistory();

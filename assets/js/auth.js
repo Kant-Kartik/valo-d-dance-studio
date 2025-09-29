@@ -241,9 +241,32 @@ document.addEventListener('DOMContentLoaded', function() {
 async function isAdmin() {
     try {
         const user = await getCurrentUser();
-        return user && user.isAdmin === true;
+        if (user && user.isAdmin === true) {
+            return true;
+        }
+        
+        // Fallback: check localStorage directly
+        const userDataFromStorage = localStorage.getItem('currentUser');
+        if (userDataFromStorage) {
+            const userData = JSON.parse(userDataFromStorage);
+            return userData.isAdmin === true;
+        }
+        
+        return false;
     } catch (error) {
         console.error('Error checking admin status:', error);
+        
+        // Even if there's an error, try localStorage as final fallback
+        try {
+            const userDataFromStorage = localStorage.getItem('currentUser');
+            if (userDataFromStorage) {
+                const userData = JSON.parse(userDataFromStorage);
+                return userData.isAdmin === true;
+            }
+        } catch (storageError) {
+            console.error('Error checking localStorage for admin status:', storageError);
+        }
+        
         return false;
     }
 }
