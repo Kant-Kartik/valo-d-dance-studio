@@ -12,195 +12,206 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background-color: #000;
-      color: white;
       height: 100vh;
-      display: flex;
-      flex-direction: column;
+      overflow: hidden;
+      position: relative;
     }
 
-    .top-header {
-      padding: 20px 40px 20px 120px; /* Increased left padding for more spacing */
-      text-align: left;
+    /* Full-screen 3D background */
+    .spline-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
     }
 
-    .main-content {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .spline-background iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
-    .left-section {
-      flex: 1;
+    /* Overlay content */
+    .content-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-
-    .title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin: 0;
+      background: rgba(0, 0, 0, 0.3); /* Subtle overlay for readability */
     }
 
     .back-btn {
       position: absolute;
       top: 20px;
       left: 20px;
-      background: #6c757d;
+      background: rgba(108, 117, 125, 0.9);
+      backdrop-filter: blur(10px);
       color: white;
       padding: 10px 15px;
       text-decoration: none;
-      border-radius: 4px;
+      border-radius: 8px;
       font-size: 14px;
-      transition: background 0.3s;
-      z-index: 1000;
+      transition: all 0.3s;
+      z-index: 100;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .back-btn:hover {
-      background: #5a6268;
+      background: rgba(90, 98, 104, 0.9);
+      transform: translateY(-2px);
     }
 
-    .slogan {
-      text-align: left;
-      font-size: 2rem;
-      margin-bottom: 30px;
-      margin-left: 40px;
-    }
-
-    .slogan span {
+    .title {
+      position: absolute;
+      top: 20px;
+      left: 120px;
+      font-size: 1.8rem;
       font-weight: bold;
-      font-size: 2.5rem;
+      color: white;
+      z-index: 100;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 20px;
     }
 
     .login-box {
-      background: #111;
-      padding: 30px;
-      border-radius: 12px;
-      width: 300px;
-      box-shadow: 0px 0px 20px rgba(255,255,255,0.1);
+      background: rgba(17, 17, 17, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 20px;
+      width: 350px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
     }
 
     .login-box h2 {
       margin: 0 0 15px;
       text-align: center;
+      font-size: 2rem;
+      font-weight: 300;
     }
 
     .login-box p {
       text-align: center;
       font-size: 0.9rem;
+      margin-bottom: 30px;
+      opacity: 0.8;
     }
 
     .login-box p a {
       color: #007bff;
       text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .login-box p a:hover {
+      color: #0056b3;
     }
 
     .login-box input {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
+      padding: 15px;
+      margin: 15px 0;
       border: none;
-      border-radius: 8px;
-      background: #222;
+      border-radius: 12px;
+      background: rgba(34, 34, 34, 0.8);
       color: white;
+      box-sizing: border-box;
+      font-size: 1rem;
+      transition: all 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Make button look styled */
+    .login-box input:focus {
+      outline: none;
+      background: rgba(34, 34, 34, 1);
+      border: 1px solid rgba(0, 123, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .login-box input::placeholder {
+      color: #aaa;
+    }
+
     .login-btn {
       display: block;
       width: 100%;
       text-align: center;
-      padding: 12px;
-      background: #007bff;
-      border-radius: 8px;
+      padding: 15px;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      border-radius: 12px;
       color: white;
       font-size: 1rem;
       font-weight: bold;
       text-decoration: none;
-      margin-top: 10px;
+      margin-top: 20px;
       border: none;
       cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
     }
 
     .login-btn:hover {
-      background: #0056b3;
-    }
-
-
-    .right-section {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .right-section iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-      border-radius: 12px;
-      background: #111;
-    }
-
-    .spline-container {
-      width: 100%;
-      max-width: 500px;
-      height: 500px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      background: linear-gradient(135deg, #0056b3, #004085);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(0, 123, 255, 0.4);
     }
 
     /* Mobile responsiveness */
     @media (max-width: 768px) {
-      .main-content {
-        flex-direction: column;
-        padding: 20px;
+      .login-box {
+        width: 90%;
+        padding: 30px 25px;
+        margin: 20px;
       }
       
-      .right-section {
-        margin-top: 20px;
+      .title {
+        left: 80px;
+        font-size: 1.5rem;
       }
       
-      .spline-container {
-        height: 300px;
-        max-width: 100%;
+      .content-overlay {
+        background: rgba(0, 0, 0, 0.5);
       }
     }
   </style>
 </head>
 <body>
 
-  <a href="../../index.html" class="back-btn">← Back</a>
+  <!-- Full-screen 3D background -->
+  <div class="spline-background">
+    <iframe src='https://my.spline.design/claritystream-WPK6ORE5jL1rRm6uw9KjSniH/' frameborder='0' width='100%' height='100%'></iframe>
+  </div>
 
-  <div class="top-header">
+  <!-- Content overlay -->
+  <div class="content-overlay">
+    <a href="../../index.html" class="back-btn">← Back</a>
     <div class="title">Valo D</div>
-  </div>
-
-  <div class="main-content">
-    <div class="left-section">
-      <div class="slogan">
-        <em>WHERE EVERY STEPS</em> <br>
-        <span>FEEL LIKE YOU</span>
-      </div>
-
-    <div class="login-box">
-      <h2>Welcome Back</h2>
-      <p>Don't have an account yet? <a href="signup.html">Sign up</a></p>
-      <input type="email" id="userEmail" placeholder="Email address" required>
-      <input type="password" id="userPassword" placeholder="Password" required>
-      
-      <!-- Login button -->
-      <button onclick="handleLogin()" class="login-btn">Login</button>
-    </div>
-  </div>
-
-    <div class="right-section">
-      <div class="spline-container">
-        <iframe src='https://my.spline.design/claritystream-WPK6ORE5jL1rRm6uw9KjSniH/' frameborder='0' width='100%' height='100%'></iframe>
+    
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Welcome Back</h2>
+        <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+        
+        <input type="email" id="userEmail" placeholder="Email address" required>
+        <input type="password" id="userPassword" placeholder="Password" required>
+        
+        <!-- Login button -->
+        <button onclick="handleLogin()" class="login-btn">Login</button>
       </div>
     </div>
   </div>
@@ -208,41 +219,8 @@
   <script>
     // Email validation function
     function isValidEmail(email) {
-      // Regular expression for email validation
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return emailRegex.test(email);
-    }
-    
-    // Password validation function
-    function isValidPassword(password) {
-      // Password must meet these requirements:
-      // - At least 8 characters long
-      // - At least one uppercase letter
-      // - At least one lowercase letter
-      // - At least one number
-      // - At least one special character
-      
-      if (password.length < 8) {
-        return { valid: false, message: "Password must be at least 8 characters long!" };
-      }
-      
-      if (!/[A-Z]/.test(password)) {
-        return { valid: false, message: "Password must contain at least one uppercase letter!" };
-      }
-      
-      if (!/[a-z]/.test(password)) {
-        return { valid: false, message: "Password must contain at least one lowercase letter!" };
-      }
-      
-      if (!/[0-9]/.test(password)) {
-        return { valid: false, message: "Password must contain at least one number!" };
-      }
-      
-      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        return { valid: false, message: "Password must contain at least one special character (!@#$%^&*(),.?\":{}|<>)!" };
-      }
-      
-      return { valid: true, message: "" };
     }
     
     async function handleLogin() {
@@ -258,7 +236,7 @@
       try {
         // Basic validation
         if (!userEmail || !userPassword) {
-          showMessage('Please fill in all required fields!', 'error');
+          showMessage('Please fill in both email and password!', 'error');
           return;
         }
         
@@ -267,7 +245,7 @@
           showMessage('Please enter a valid email address!', 'error');
           return;
         }
-
+        
         // Try Supabase authentication first
         if (window.authUtils && window.supabaseConfig.isConfigured()) {
           const result = await window.authUtils.signInWithSupabase(userEmail, userPassword);
@@ -318,11 +296,14 @@
               const returnUrl = urlParams.get('return') || '/homepage.html';
               
               window.location.href = returnUrl;
+              return;
             } else {
-              showMessage('Incorrect password!', 'error');
+              showMessage('Invalid password!', 'error');
+              return;
             }
           } else {
-            showMessage('No account found with this email. Please sign up first!', 'error');
+            showMessage('No account found with this email!', 'error');
+            return;
           }
         }
       } catch (error) {
@@ -383,6 +364,13 @@
         }, 300);
       }, 4000);
     }
+
+    // Allow Enter key to submit
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
+    });
   </script>
 
 </body>
