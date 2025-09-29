@@ -364,12 +364,30 @@
   </div>
 
   <script>
+    // Function to update admin UI
+    function updateAdminUI(user) {
+      if (user && user.isAdmin === true) {
+        const adminIndicator = document.getElementById('adminIndicator');
+        const adminHistoryBtn = document.getElementById('adminHistoryBtn');
+        
+        if (adminIndicator) {
+          adminIndicator.style.display = 'inline';
+          console.log('Admin indicator shown');
+        }
+        if (adminHistoryBtn) {
+          adminHistoryBtn.style.display = 'inline';
+          console.log('Admin history button shown');
+        }
+      }
+    }
+
     // Load user data when page loads
     window.addEventListener('DOMContentLoaded', async function() {
       const userData = localStorage.getItem('currentUser');
       
       if (userData) {
         const user = JSON.parse(userData);
+        console.log('Homepage loaded with user:', user); // Debug log
         
         // Update profile name
         const profileName = document.getElementById('profileName');
@@ -385,13 +403,24 @@
         }
         
         // Show admin controls if user is admin
-        if (user.isAdmin) {
-          const adminIndicator = document.getElementById('adminIndicator');
-          const adminHistoryBtn = document.getElementById('adminHistoryBtn');
-          
-          if (adminIndicator) adminIndicator.style.display = 'inline';
-          if (adminHistoryBtn) adminHistoryBtn.style.display = 'inline';
-        }
+        updateAdminUI(user);
+        
+        // Also check with auth system after a short delay to ensure everything is loaded
+        setTimeout(async () => {
+          try {
+            const isAdminUser = await window.authUtils.isAdmin();
+            console.log('Secondary admin check result:', isAdminUser); // Debug log
+            
+            if (isAdminUser && !user.isAdmin) {
+              // Update localStorage to include admin status
+              const updatedUser = { ...user, isAdmin: true };
+              localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+              updateAdminUI(updatedUser);
+            }
+          } catch (error) {
+            console.error('Error in secondary admin check:', error);
+          }
+        }, 1000);
       }
     });
     

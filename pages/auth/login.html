@@ -248,7 +248,8 @@
               id: userData.id,
               email: userData.email,
               name: userData.user_metadata?.name || userData.email,
-              photo: userData.user_metadata?.photo || '../../assets/images/pic.png'
+              photo: userData.user_metadata?.photo || '../../assets/images/pic.png',
+              isAdmin: userData.user_metadata?.isAdmin || false
             };
             localStorage.setItem('currentUser', JSON.stringify(currentUserData));
             
@@ -276,7 +277,8 @@
               const currentUserData = {
                 name: userData.name,
                 email: userEmail,
-                photo: userData.photo || '../../assets/images/pic.png'
+                photo: userData.photo || '../../assets/images/pic.png',
+                isAdmin: userData.isAdmin || false
               };
               localStorage.setItem('currentUser', JSON.stringify(currentUserData));
               
