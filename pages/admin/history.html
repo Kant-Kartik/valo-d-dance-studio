@@ -8,6 +8,7 @@
   <script src="../../assets/js/config.js"></script>
   <script src="../../assets/js/auth.js"></script>
   <script src="../../assets/js/video-manager.js"></script>
+  <script src="../../assets/js/database.js"></script>
   <style>
     body {
       margin: 0;
@@ -167,6 +168,110 @@
       align-items: center;
     }
 
+    .tab-container {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #333;
+    }
+
+    .tab {
+      padding: 15px 25px;
+      background: #222;
+      color: #ccc;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      margin-right: 5px;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      background: #007bff;
+      color: white;
+    }
+
+    .tab:hover {
+      background: #333;
+    }
+
+    .tab.active:hover {
+      background: #0056b3;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .contact-message {
+      background: #222;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 4px solid #007bff;
+    }
+
+    .contact-message.unread {
+      border-left-color: #ffc107;
+      background: #2a2a1a;
+    }
+
+    .contact-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .contact-info {
+      display: flex;
+      gap: 20px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .contact-status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .status-unread {
+      background: #ffc107;
+      color: black;
+    }
+
+    .status-read {
+      background: #28a745;
+      color: white;
+    }
+
+    .contact-message-text {
+      background: #333;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .mark-read-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .mark-read-btn:hover {
+      background: #218838;
+    }
+
     .filter-group {
       display: flex;
       flex-direction: column;
@@ -208,8 +313,16 @@
   </div>
 
   <div class="container">
-    <!-- Stats Section -->
-    <div class="stats">
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+      <button class="tab active" onclick="switchTab('history')">Admin History</button>
+      <button class="tab" onclick="switchTab('contacts')">Contact Messages</button>
+    </div>
+
+    <!-- Admin History Tab -->
+    <div id="historyTab" class="tab-content active">
+      <!-- Stats Section -->
+      <div class="stats">
       <div class="stat-card">
         <div class="stat-number" id="totalActions">0</div>
         <div class="stat-label">Total Actions</div>
@@ -273,11 +386,47 @@
         <!-- History entries will be populated here -->
       </div>
     </div>
+    </div>
+
+    <!-- Contact Messages Tab -->
+    <div id="contactsTab" class="tab-content">
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalMessages">0</div>
+          <div class="stat-label">Total Messages</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="unreadMessages">0</div>
+          <div class="stat-label">Unread Messages</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="readMessages">0</div>
+          <div class="stat-label">Read Messages</div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label>Status:</label>
+          <select id="messageStatusFilter">
+            <option value="">All Messages</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="contactMessages">
+        <!-- Contact messages will be populated here -->
+      </div>
+    </div>
   </div>
 
   <script>
     let allHistory = [];
+    let allMessages = [];
     let currentUser = null;
+    let currentTab = 'history';
 
     // Initialize the page
     async function initializePage() {
@@ -321,12 +470,15 @@
         
         // Load and display history
         await loadHistory();
+        await loadContactMessages();
         updateStats();
+        updateContactStats();
         
         // Set up filter event listeners
         document.getElementById('actionFilter').addEventListener('change', filterHistory);
         document.getElementById('danceTypeFilter').addEventListener('change', filterHistory);
         document.getElementById('levelFilter').addEventListener('change', filterHistory);
+        document.getElementById('messageStatusFilter').addEventListener('change', filterContactMessages);
         
       } catch (error) {
         console.error('Error initializing page:', error);
@@ -415,6 +567,107 @@
       document.getElementById('videosAdded').textContent = videosAdded;
       document.getElementById('videosRemoved').textContent = videosRemoved;
       document.getElementById('totalVideos').textContent = totalVideos;
+    }
+
+    // Switch between tabs
+    function switchTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(tabName + 'Tab').classList.add('active');
+      
+      currentTab = tabName;
+    }
+
+    // Load contact messages
+    async function loadContactMessages() {
+      try {
+        allMessages = await window.databaseManager.getContactMessages();
+        displayContactMessages(allMessages);
+      } catch (error) {
+        console.error('Error loading contact messages:', error);
+        document.getElementById('contactMessages').innerHTML = `
+          <div class="no-history">Error loading contact messages: ${error.message}</div>
+        `;
+      }
+    }
+
+    // Display contact messages
+    function displayContactMessages(messages) {
+      const container = document.getElementById('contactMessages');
+      
+      if (!messages || messages.length === 0) {
+        container.innerHTML = '<div class="no-history">No contact messages received yet</div>';
+        return;
+      }
+
+      container.innerHTML = messages.map(message => {
+        const submitDate = new Date(message.submitted_at || message.addedAt);
+        const statusClass = message.status === 'unread' ? 'unread' : 'read';
+        const statusBadgeClass = message.status === 'unread' ? 'status-unread' : 'status-read';
+        
+        return `
+          <div class="contact-message ${statusClass}">
+            <div class="contact-header">
+              <div class="contact-info">
+                <strong>${message.name}</strong>
+                <span>${message.email}</span>
+                <span>${submitDate.toLocaleDateString()} ${submitDate.toLocaleTimeString()}</span>
+              </div>
+              <div>
+                <span class="contact-status ${statusBadgeClass}">${message.status || 'unread'}</span>
+                ${message.status === 'unread' ? `<button class="mark-read-btn" onclick="markAsRead('${message.id}')">Mark as Read</button>` : ''}
+              </div>
+            </div>
+            <div class="contact-message-text">${message.message}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Filter contact messages
+    function filterContactMessages() {
+      const statusFilter = document.getElementById('messageStatusFilter').value;
+      let filteredMessages = allMessages;
+
+      if (statusFilter) {
+        filteredMessages = filteredMessages.filter(message => 
+          (message.status || 'unread') === statusFilter
+        );
+      }
+
+      displayContactMessages(filteredMessages);
+    }
+
+    // Mark message as read
+    async function markAsRead(messageId) {
+      try {
+        const success = await window.databaseManager.markMessageAsRead(messageId);
+        if (success) {
+          // Reload messages to reflect the change
+          await loadContactMessages();
+          updateContactStats();
+        } else {
+          alert('Failed to mark message as read');
+        }
+      } catch (error) {
+        console.error('Error marking message as read:', error);
+        alert('Error marking message as read');
+      }
+    }
+
+    // Update contact message statistics
+    function updateContactStats() {
+      const totalMessages = allMessages.length;
+      const unreadMessages = allMessages.filter(msg => (msg.status || 'unread') === 'unread').length;
+      const readMessages = allMessages.filter(msg => msg.status === 'read').length;
+
+      document.getElementById('totalMessages').textContent = totalMessages;
+      document.getElementById('unreadMessages').textContent = unreadMessages;
+      document.getElementById('readMessages').textContent = readMessages;
     }
 
     // Initialize page when DOM is loaded

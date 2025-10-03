@@ -3,6 +3,8 @@
 // Video storage structure
 const VIDEO_STORAGE_KEY = 'valo_d_videos';
 const ADMIN_HISTORY_KEY = 'valo_d_admin_history';
+const LIKES_STORAGE_KEY = 'valo_d_video_likes';
+const COMMENTS_STORAGE_KEY = 'valo_d_video_comments';
 
 // Initialize video storage with default videos if not exists
 function initializeVideoStorage() {
@@ -15,13 +17,31 @@ function initializeVideoStorage() {
                 beginner: [
                     { id: 'bharata_beg_1', url: 'https://www.youtube.com/embed/vmwZ9R03bXs', title: 'Bharatanatyam Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
                     { id: 'bharata_beg_2', url: 'https://www.youtube.com/embed/MzDZYVhfgNw', title: 'Bharatanatyam Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
-                    { id: 'bharata_beg_3', url: 'https://www.youtube.com/embed/OIKOHzePJCA', title: 'Bharatanatyam Basics 3', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'bharata_beg_3', url: 'https://www.youtube.com/embed/OIKOHzePJCA', title: 'Bharatanatyam Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_beg_4', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_beg_5', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_beg_6', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_beg_7', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_beg_8', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_beg_9', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intermediate: [
-                    { id: 'bharata_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Bharatanatyam Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'bharata_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Bharatanatyam Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_int_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_int_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_int_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_int_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_int_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_int_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intense: [
-                    { id: 'bharata_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Bharatanatyam Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'bharata_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Bharatanatyam Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_ins_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_ins_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_ins_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_ins_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_ins_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'bharata_ins_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ]
             },
             hiphop: {
@@ -34,32 +54,80 @@ function initializeVideoStorage() {
                     { id: 'hiphop_beg_6', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intermediate: [
-                    { id: 'hiphop_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Hip Hop Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'hiphop_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Hip Hop Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_int_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_int_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_int_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_int_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_int_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_int_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intense: [
-                    { id: 'hiphop_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Hip Hop Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'hiphop_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Hip Hop Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_ins_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_ins_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_ins_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_ins_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_ins_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'hiphop_ins_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ]
             },
             breakdance: {
                 beginner: [
-                    { id: 'break_beg_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Breakdance Basics 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'break_beg_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Breakdance Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_beg_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_beg_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_beg_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_beg_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_beg_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_beg_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intermediate: [
-                    { id: 'break_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Breakdance Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'break_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Breakdance Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_int_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_int_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_int_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_int_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_int_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_int_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intense: [
-                    { id: 'break_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Breakdance Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'break_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Breakdance Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_ins_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_ins_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_ins_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_ins_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_ins_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'break_ins_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ]
             },
             poledance: {
                 beginner: [
-                    { id: 'pole_beg_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Pole Dance Basics 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'pole_beg_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Pole Dance Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_beg_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_beg_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_beg_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_beg_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_beg_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_beg_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intermediate: [
-                    { id: 'pole_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Pole Dance Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'pole_int_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Pole Dance Intermediate 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_int_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_int_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_int_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_int_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_int_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_int_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ],
                 intense: [
-                    { id: 'pole_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Pole Dance Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() }
+                    { id: 'pole_ins_1', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Pole Dance Advanced 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_ins_2', url: 'https://www.youtube.com/embed/kbUzi7meesU', title: 'Hip Hop Basics 1', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_ins_3', url: 'https://www.youtube.com/embed/1sD51hC0yRg', title: 'Hip Hop Basics 2', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_ins_4', url: 'https://www.youtube.com/embed/ujREEgxEP7g', title: 'Hip Hop Basics 3', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_ins_5', url: 'https://www.youtube.com/embed/KxV8I_YyiaY', title: 'Hip Hop Basics 4', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_ins_6', url: 'https://www.youtube.com/embed/1WIA6Yvj8Yg', title: 'Hip Hop Basics 5', addedBy: 'system', addedAt: new Date().toISOString() },
+                    { id: 'pole_ins_7', url: 'https://www.youtube.com/embed/BW9Q930DiK4', title: 'Hip Hop Basics 6', addedBy: 'system', addedAt: new Date().toISOString() }
                 ]
             }
         };
@@ -70,13 +138,21 @@ function initializeVideoStorage() {
 }
 
 // Get videos for a specific dance type and level
-function getVideos(danceType, level) {
+async function getVideos(danceType, level) {
     try {
-        const videos = JSON.parse(localStorage.getItem(VIDEO_STORAGE_KEY)) || {};
-        return videos[danceType]?.[level] || [];
+        // Use database manager if available
+        if (window.databaseManager) {
+            return await window.databaseManager.getVideosFromDB(danceType, level);
+        } else {
+            // Fallback to localStorage
+            const videos = JSON.parse(localStorage.getItem(VIDEO_STORAGE_KEY)) || {};
+            return videos[danceType]?.[level] || [];
+        }
     } catch (error) {
         console.error('Error getting videos:', error);
-        return [];
+        // Final fallback
+        const videos = JSON.parse(localStorage.getItem(VIDEO_STORAGE_KEY)) || {};
+        return videos[danceType]?.[level] || [];
     }
 }
 
@@ -116,8 +192,13 @@ async function addVideo(danceType, level, videoUrl, title) {
         videos[danceType][level].push(newVideo);
         localStorage.setItem(VIDEO_STORAGE_KEY, JSON.stringify(videos));
         
+        // Store in database if available
+        if (window.databaseManager) {
+            await window.databaseManager.storeVideoData(danceType, level, newVideo);
+        }
+        
         // Log to admin history
-        logAdminAction('ADD', {
+        await logAdminAction('ADD', {
             videoId: newVideo.id,
             danceType,
             level,
@@ -157,8 +238,13 @@ async function removeVideo(danceType, level, videoId) {
         videos[danceType][level].splice(videoIndex, 1);
         localStorage.setItem(VIDEO_STORAGE_KEY, JSON.stringify(videos));
         
+        // Remove from database if available
+        if (window.databaseManager) {
+            await window.databaseManager.removeVideoFromDB(danceType, level, videoId);
+        }
+        
         // Log to admin history
-        logAdminAction('REMOVE', {
+        await logAdminAction('REMOVE', {
             videoId: removedVideo.id,
             danceType,
             level,
@@ -175,25 +261,31 @@ async function removeVideo(danceType, level, videoId) {
 }
 
 // Log admin actions to history
-function logAdminAction(action, details) {
+async function logAdminAction(action, details) {
     try {
-        const history = JSON.parse(localStorage.getItem(ADMIN_HISTORY_KEY)) || [];
-        
-        const historyEntry = {
-            id: 'action_' + Date.now(),
-            action,
-            timestamp: new Date().toISOString(),
-            details
-        };
-        
-        history.unshift(historyEntry); // Add to beginning
-        
-        // Keep only last 100 actions
-        if (history.length > 100) {
-            history.splice(100);
+        // Use database manager if available
+        if (window.databaseManager) {
+            await window.databaseManager.storeAdminAction(action, details);
+        } else {
+            // Fallback to localStorage
+            const history = JSON.parse(localStorage.getItem(ADMIN_HISTORY_KEY)) || [];
+            
+            const historyEntry = {
+                id: 'action_' + Date.now(),
+                action,
+                timestamp: new Date().toISOString(),
+                details
+            };
+            
+            history.unshift(historyEntry); // Add to beginning
+            
+            // Keep only last 100 actions
+            if (history.length > 100) {
+                history.splice(100);
+            }
+            
+            localStorage.setItem(ADMIN_HISTORY_KEY, JSON.stringify(history));
         }
-        
-        localStorage.setItem(ADMIN_HISTORY_KEY, JSON.stringify(history));
     } catch (error) {
         console.error('Error logging admin action:', error);
     }
@@ -202,31 +294,125 @@ function logAdminAction(action, details) {
 // Get admin history (admin only)
 async function getAdminHistory() {
     try {
-        // Check admin status with fallback to localStorage
-        const isAdminUser = await window.authUtils.isAdmin();
-        const userDataFromStorage = localStorage.getItem('currentUser');
-        let hasAdminAccess = isAdminUser;
-        
-        // Fallback check if auth utils fails
-        if (!hasAdminAccess && userDataFromStorage) {
-            const userData = JSON.parse(userDataFromStorage);
-            hasAdminAccess = userData.isAdmin === true;
+        // Use database manager if available
+        if (window.databaseManager) {
+            return await window.databaseManager.getAdminHistory();
+        } else {
+            // Fallback to localStorage
+            const isAdminUser = await window.authUtils.isAdmin();
+            const userDataFromStorage = localStorage.getItem('currentUser');
+            let hasAdminAccess = isAdminUser;
+            
+            // Fallback check if auth utils fails
+            if (!hasAdminAccess && userDataFromStorage) {
+                const userData = JSON.parse(userDataFromStorage);
+                hasAdminAccess = userData.isAdmin === true;
+            }
+            
+            if (!hasAdminAccess) {
+                throw new Error('Admin privileges required');
+            }
+            
+            return JSON.parse(localStorage.getItem(ADMIN_HISTORY_KEY)) || [];
         }
-        
-        if (!hasAdminAccess) {
-            throw new Error('Admin privileges required');
-        }
-        
-        return JSON.parse(localStorage.getItem(ADMIN_HISTORY_KEY)) || [];
     } catch (error) {
         console.error('Error getting admin history:', error);
         return [];
     }
 }
 
+// ===== LIKE AND COMMENT SYSTEM =====
+
+// Get likes for a video
+function getVideoLikes(videoId) {
+    const likes = localStorage.getItem(LIKES_STORAGE_KEY);
+    const likesData = likes ? JSON.parse(likes) : {};
+    return likesData[videoId] || { count: 0, users: [] };
+}
+
+// Toggle like for a video
+async function toggleVideoLike(videoId) {
+    const currentUser = await window.authUtils.getCurrentUser();
+    if (!currentUser) {
+        alert('Please log in to like videos');
+        return false;
+    }
+
+    const likes = localStorage.getItem(LIKES_STORAGE_KEY);
+    const likesData = likes ? JSON.parse(likes) : {};
+    
+    if (!likesData[videoId]) {
+        likesData[videoId] = { count: 0, users: [] };
+    }
+    
+    const userIndex = likesData[videoId].users.indexOf(currentUser.email);
+    
+    if (userIndex > -1) {
+        // User already liked, remove like
+        likesData[videoId].users.splice(userIndex, 1);
+        likesData[videoId].count--;
+    } else {
+        // Add like
+        likesData[videoId].users.push(currentUser.email);
+        likesData[videoId].count++;
+    }
+    
+    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likesData));
+    return true;
+}
+
+// Check if current user liked a video
+async function hasUserLikedVideo(videoId) {
+    const currentUser = await window.authUtils.getCurrentUser();
+    if (!currentUser) return false;
+    
+    const likes = getVideoLikes(videoId);
+    return likes.users.includes(currentUser.email);
+}
+
+// Get comments for a video
+function getVideoComments(videoId) {
+    const comments = localStorage.getItem(COMMENTS_STORAGE_KEY);
+    const commentsData = comments ? JSON.parse(comments) : {};
+    return commentsData[videoId] || [];
+}
+
+// Add comment to a video
+async function addVideoComment(videoId, commentText) {
+    const currentUser = await window.authUtils.getCurrentUser();
+    if (!currentUser) {
+        alert('Please log in to comment');
+        return false;
+    }
+    
+    if (!commentText.trim()) {
+        alert('Please enter a comment');
+        return false;
+    }
+    
+    const comments = localStorage.getItem(COMMENTS_STORAGE_KEY);
+    const commentsData = comments ? JSON.parse(comments) : {};
+    
+    if (!commentsData[videoId]) {
+        commentsData[videoId] = [];
+    }
+    
+    const newComment = {
+        id: Date.now().toString(),
+        text: commentText.trim(),
+        author: currentUser.email,
+        authorName: currentUser.user_metadata?.full_name || currentUser.email,
+        timestamp: new Date().toISOString()
+    };
+    
+    commentsData[videoId].push(newComment);
+    localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(commentsData));
+    return true;
+}
+
 // Render videos on a page
-function renderVideos(danceType, level, containerId) {
-    const videos = getVideos(danceType, level);
+async function renderVideos(danceType, level, containerId) {
+    const videos = await getVideos(danceType, level);
     const container = document.getElementById(containerId);
     
     if (!container) {
@@ -236,9 +422,13 @@ function renderVideos(danceType, level, containerId) {
     
     container.innerHTML = '';
     
-    videos.forEach(video => {
+    videos.forEach(async (video, index) => {
         const videoWrapper = document.createElement('div');
-        videoWrapper.style.marginBottom = '20px';
+        videoWrapper.style.marginBottom = '30px';
+        videoWrapper.style.border = '1px solid #333';
+        videoWrapper.style.borderRadius = '8px';
+        videoWrapper.style.padding = '15px';
+        videoWrapper.style.backgroundColor = '#111';
         
         const videoElement = document.createElement('div');
         videoElement.className = 'video-container';
@@ -255,8 +445,153 @@ function renderVideos(danceType, level, containerId) {
             <p>Added by: ${video.addedBy} on ${new Date(video.addedAt).toLocaleDateString()}</p>
         `;
         
+        // Get like and comment data
+        const likes = getVideoLikes(video.id);
+        const comments = getVideoComments(video.id);
+        const userLiked = await hasUserLikedVideo(video.id);
+        
+        // Create interaction section
+        const interactionSection = document.createElement('div');
+        interactionSection.className = 'video-interactions';
+        interactionSection.style.marginTop = '15px';
+        interactionSection.style.borderTop = '1px solid #333';
+        interactionSection.style.paddingTop = '15px';
+        
+        // Like button
+        const likeButton = document.createElement('button');
+        likeButton.className = 'like-btn';
+        likeButton.innerHTML = `${userLiked ? '❤️' : '🤍'} ${likes.count} ${likes.count === 1 ? 'Like' : 'Likes'}`;
+        likeButton.style.cssText = `
+            background: ${userLiked ? '#ff4757' : 'transparent'};
+            color: white;
+            border: 1px solid #007bff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        `;
+        
+        likeButton.addEventListener('click', async () => {
+            const success = await toggleVideoLike(video.id);
+            if (success) {
+                // Refresh the video section to update like count
+                renderVideos(danceType, level, containerId);
+            }
+        });
+        
+        // Comment button
+        const commentButton = document.createElement('button');
+        commentButton.className = 'comment-btn';
+        commentButton.innerHTML = `💬 ${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`;
+        commentButton.style.cssText = `
+            background: transparent;
+            color: white;
+            border: 1px solid #007bff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        `;
+        
+        // Button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.marginBottom = '15px';
+        buttonContainer.appendChild(likeButton);
+        buttonContainer.appendChild(commentButton);
+        
+        // Comment section (initially hidden)
+        const commentSection = document.createElement('div');
+        commentSection.className = 'comment-section';
+        commentSection.style.display = 'none';
+        commentSection.style.marginTop = '15px';
+        
+        // Comment input
+        const commentInput = document.createElement('textarea');
+        commentInput.placeholder = 'Write a comment...';
+        commentInput.style.cssText = `
+            width: 100%;
+            min-height: 60px;
+            background: #222;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 10px;
+            resize: vertical;
+            font-family: inherit;
+            margin-bottom: 10px;
+        `;
+        
+        const submitCommentBtn = document.createElement('button');
+        submitCommentBtn.textContent = 'Post Comment';
+        submitCommentBtn.style.cssText = `
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        `;
+        
+        submitCommentBtn.addEventListener('click', async () => {
+            const success = await addVideoComment(video.id, commentInput.value);
+            if (success) {
+                commentInput.value = '';
+                renderVideos(danceType, level, containerId);
+            }
+        });
+        
+        // Comments display
+        const commentsDisplay = document.createElement('div');
+        commentsDisplay.className = 'comments-display';
+        
+        comments.forEach(comment => {
+            const commentDiv = document.createElement('div');
+            commentDiv.style.cssText = `
+                background: #222;
+                padding: 10px;
+                border-radius: 4px;
+                margin-bottom: 10px;
+                border-left: 3px solid #007bff;
+            `;
+            
+            commentDiv.innerHTML = `
+                <div style="font-weight: bold; color: #007bff; margin-bottom: 5px;">
+                    ${comment.authorName}
+                </div>
+                <div style="margin-bottom: 5px;">${comment.text}</div>
+                <div style="font-size: 12px; color: #888;">
+                    ${new Date(comment.timestamp).toLocaleString()}
+                </div>
+            `;
+            
+            commentsDisplay.appendChild(commentDiv);
+        });
+        
+        commentSection.appendChild(commentInput);
+        commentSection.appendChild(submitCommentBtn);
+        commentSection.appendChild(commentsDisplay);
+        
+        // Toggle comment section visibility
+        commentButton.addEventListener('click', () => {
+            if (commentSection.style.display === 'none') {
+                commentSection.style.display = 'block';
+                commentButton.style.background = '#007bff';
+            } else {
+                commentSection.style.display = 'none';
+                commentButton.style.background = 'transparent';
+            }
+        });
+        
+        interactionSection.appendChild(buttonContainer);
+        interactionSection.appendChild(commentSection);
+        
         videoWrapper.appendChild(videoElement);
         videoWrapper.appendChild(videoInfo);
+        videoWrapper.appendChild(interactionSection);
         container.appendChild(videoWrapper);
     });
 }
@@ -389,5 +724,11 @@ window.videoManager = {
     addAdminControls,
     handleAddVideo,
     showRemoveVideoInterface,
-    handleRemoveVideo
+    handleRemoveVideo,
+    // Like and comment functions
+    getVideoLikes,
+    toggleVideoLike,
+    hasUserLikedVideo,
+    getVideoComments,
+    addVideoComment
 };

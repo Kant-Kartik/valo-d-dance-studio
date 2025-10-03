@@ -74,6 +74,28 @@
       border-radius: 8px;
       border: 2px solid #007bff;
     }
+
+    /* Like and Comment Button Styles */
+    .like-btn:hover, .comment-btn:hover {
+      background: #007bff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+
+    .like-btn:active, .comment-btn:active {
+      transform: translateY(0);
+    }
+
+    .comment-section textarea:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    .comment-section button:hover {
+      background: #0056b3 !important;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
